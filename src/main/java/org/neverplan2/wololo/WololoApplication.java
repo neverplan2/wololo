@@ -4,9 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class WakeOnLanService {
+public class WololoApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(WakeOnLanService.class, args);
+        SpringApplication.run(WololoApplication.class, args);
     }
 }
