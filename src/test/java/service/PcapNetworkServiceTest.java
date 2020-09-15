@@ -11,7 +11,7 @@ import org.neverplan2.wololo.service.impl.pcap.PcapNetworkService;
 
 import static org.junit.Assert.assertTrue;
 
-@RunWith(MockitoJUnitRunner.class)
+//@RunWith(MockitoJUnitRunner.class)
 public class PcapNetworkServiceTest {
 
     @Mock
