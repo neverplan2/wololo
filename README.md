@@ -1,1 +1,1 @@
-# wololo - the app
+# wololo
