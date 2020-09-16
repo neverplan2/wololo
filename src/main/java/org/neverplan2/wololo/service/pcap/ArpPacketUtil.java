@@ -86,7 +86,7 @@ public class ArpPacketUtil {
                 log.error(e.getLocalizedMessage(), e);
             } catch (InterruptedException e) {
                 log.error(e.getLocalizedMessage(), e);
-                throw new RuntimeException(e);
+                Thread.currentThread().interrupt();
             }
             return null;
         }).filter(s -> s != null).collect(Collectors.toList());
