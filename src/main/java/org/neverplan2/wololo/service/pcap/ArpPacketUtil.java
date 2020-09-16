@@ -1,4 +1,4 @@
-package org.neverplan2.wololo.service.impl.pcap;
+package org.neverplan2.wololo.service.pcap;
 
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -82,8 +82,11 @@ public class ArpPacketUtil {
         List<ArpHeader> result = futures.stream().map(f -> {
             try {
                 return f.get();
-            } catch (InterruptedException | ExecutionException e) {
+            } catch (ExecutionException e) {
                 log.error(e.getLocalizedMessage(), e);
+            } catch (InterruptedException e) {
+                log.error(e.getLocalizedMessage(), e);
+                throw new RuntimeException(e);
             }
             return null;
         }).filter(s -> s != null).collect(Collectors.toList());
@@ -93,26 +96,28 @@ public class ArpPacketUtil {
         return result;
     }
 
-    public ArpHeader getMacAddress(PcapNetworkInterface pni, InetAddress destAddr) throws SocketException, PcapNativeException, NotOpenException {
-        PcapAddress addr = pni.getAddresses().stream().filter(a -> (a instanceof PcapIpV4Address)).findFirst().get();
+    public ArpHeader getMacAddress(PcapNetworkInterface pni, InetAddress destAddr) throws SocketException, PcapNativeException, NotOpenException, InterruptedException {
+        PcapAddress addr = pni.getAddresses().stream().filter(a -> (a instanceof PcapIpV4Address)).findFirst().orElse(null);
+        if (addr == null) {
+            return null;
+        }
         NetworkInterface ni = NetworkInterface.getByInetAddress(addr.getAddress());
         MacAddress srcMacAddr = MacAddress.getByAddress(ni.getHardwareAddress());
         InetAddress srcAddr = addr.getAddress();
 
-        PcapHandle handle = pni.openLive(SNAPLEN, PromiscuousMode.PROMISCUOUS, timeout);
-        PcapHandle sendHandle = pni.openLive(SNAPLEN, PromiscuousMode.PROMISCUOUS, timeout);
         ExecutorService pool = Executors.newSingleThreadExecutor();
 
         ArpHeader arpHeader = null;
 
-        try {
+        try(PcapHandle handle = pni.openLive(SNAPLEN, PromiscuousMode.PROMISCUOUS, timeout);
+            PcapHandle sendHandle = pni.openLive(SNAPLEN, PromiscuousMode.PROMISCUOUS, timeout)) {
             handle.setFilter("arp and src host " + destAddr.getHostAddress() + " and dst host " + srcAddr.getHostAddress() + " and ether dst " + Pcaps.toBpfString(srcMacAddr), BpfCompileMode.OPTIMIZE);
 
             Future<ArpHeader> future = pool.submit(() -> {
                 ArpPacketListener listener = new ArpPacketListener();
                 try {
                     handle.loop(packetCount, listener);
-                } catch (PcapNativeException | InterruptedException | NotOpenException e) {
+                } catch (PcapNativeException | NotOpenException e) {
                     log.error(e.getLocalizedMessage(), e);
                 }
                 return listener.arpHeader;
@@ -125,11 +130,7 @@ public class ArpPacketUtil {
                 Packet p = etherBuilder.build();
                 log.info(p.toString());
                 sendHandle.sendPacket(p);
-                try {
-                    Thread.sleep(packetDelay);
-                } catch (InterruptedException e) {
-                    break;
-                }
+                Thread.sleep(packetDelay);
             }
 
             try {
@@ -137,17 +138,11 @@ public class ArpPacketUtil {
                     handle.breakLoop();
                 }
                 arpHeader = future.get();
-            } catch (InterruptedException | ExecutionException e) {
+            } catch (ExecutionException e) {
                 log.error(e.getLocalizedMessage(), e);
             }
 
         } finally {
-            if (handle != null && handle.isOpen()) {
-                handle.close();
-            }
-            if (sendHandle != null && sendHandle.isOpen()) {
-                sendHandle.close();
-            }
             if (pool != null && !pool.isShutdown()) {
                 pool.shutdown();
             }

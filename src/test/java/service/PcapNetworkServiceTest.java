@@ -1,13 +1,10 @@
 package service;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.neverplan2.wololo.exception.WololoException;
-import org.neverplan2.wololo.service.impl.pcap.ArpPacketUtil;
-import org.neverplan2.wololo.service.impl.pcap.PcapNetworkService;
+import org.neverplan2.wololo.service.pcap.ArpPacketUtil;
+import org.neverplan2.wololo.service.pcap.PcapNetworkService;
 
 import static org.junit.Assert.assertTrue;
 

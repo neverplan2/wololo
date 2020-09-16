@@ -1,4 +1,4 @@
-package org.neverplan2.wololo.service.impl.pcap;
+package org.neverplan2.wololo.service.pcap;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.net.util.SubnetUtils;
