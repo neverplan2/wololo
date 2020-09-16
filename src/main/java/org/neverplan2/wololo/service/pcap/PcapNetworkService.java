@@ -81,7 +81,7 @@ public class PcapNetworkService implements NetworkService {
             throw new WololoException("Failed to scan network.", e);
         }
         PcapAddress pcapAddr = pni.getAddresses().stream().filter(a->a instanceof PcapIpV4Address).findFirst().orElse(null);
-        if (pcapAddr) return new ArrayList<>();
+        if (pcapAddr == null) return new ArrayList<>();
         SubnetUtils su = new SubnetUtils(pcapAddr.getAddress().getHostAddress(), pcapAddr.getNetmask().getHostAddress());
         return arpPacketUtil.getMacAddress(pni, Arrays.asList(su.getInfo().getAllAddresses()))
                 .stream().map(a->new Address(a.getSrcProtocolAddr().getHostAddress(), a.getSrcProtocolAddr().getCanonicalHostName(), a.getSrcHardwareAddr().toString(), "", "")).collect(Collectors.toList());
