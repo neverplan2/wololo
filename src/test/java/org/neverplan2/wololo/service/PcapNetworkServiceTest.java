@@ -1,14 +1,17 @@
-package service;
+package org.neverplan2.wololo.service;
 
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.neverplan2.wololo.exception.WololoException;
 import org.neverplan2.wololo.service.pcap.ArpPacketUtil;
 import org.neverplan2.wololo.service.pcap.PcapNetworkService;
 
 import static org.junit.Assert.assertTrue;
 
-//@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.class)
 public class PcapNetworkServiceTest {
 
     @Mock
@@ -16,7 +19,12 @@ public class PcapNetworkServiceTest {
     @InjectMocks
     PcapNetworkService ns;
 
-    //@Test
+    @Test
+    public void alwaysTrue() {
+        assertTrue(true);
+    }
+
+        //@Test
     public void getNetworkInterfaces() throws WololoException {
         ns.getNetworkInterfaces().stream().forEach(n -> System.out.println(n.getName()));
         assertTrue(true);
