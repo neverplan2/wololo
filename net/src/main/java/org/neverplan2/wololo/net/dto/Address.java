@@ -1,4 +1,4 @@
-package org.neverplan2.wololo.model;
+package org.neverplan2.wololo.net.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

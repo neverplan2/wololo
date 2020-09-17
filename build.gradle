@@ -1,37 +1,42 @@
 plugins {
-    id 'org.springframework.boot' version '2.3.3.RELEASE'
-    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
-    id 'java'
+    id 'io.spring.dependency-management' version '1.0.9.RELEASE' apply false
+    id 'org.springframework.boot' version '2.3.3.RELEASE' apply false
     id 'org.sonarqube' version '3.0'
-    id 'jacoco'
 }
 
-group 'org.neverplan2'
-version '1.0-SNAPSHOT'
+apply from: 'dependencies.gradle'
 
-repositories {
-    mavenCentral()
-}
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'maven-publish'
+    apply plugin: 'jacoco'
 
-dependencies {
-    implementation 'org.pcap4j:pcap4j-core:1.8.2'
-    implementation 'commons-net:commons-net:3.6'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    compileOnly 'org.projectlombok:lombok:1.18.12'
-    annotationProcessor 'org.projectlombok:lombok:1.18.12'
-    implementation 'io.springfox:springfox-swagger2:2.9.2'
-    implementation 'io.springfox:springfox-swagger-ui:2.9.2'
-    implementation 'junit:junit:4.12'
-    testCompileOnly 'org.projectlombok:lombok:1.18.12'
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
-    testImplementation('org.springframework.boot:spring-boot-starter-test') {
-        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    sourceCompatibility = JavaVersion.VERSION_11
+
+    repositories {
+        mavenCentral()
+    }
+
+    jacocoTestReport {
+        reports {
+            xml.enabled true
+        }
+    }
+    test.finalizedBy jacocoTestReport
+
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                groupId group
+                version version
+                from components.java
+            }
+        }
     }
 }
 
-jacocoTestReport {
-    reports {
-        xml.enabled true
-    }
+task build {
+    dependsOn subprojects.build
 }
-test.finalizedBy jacocoTestReport

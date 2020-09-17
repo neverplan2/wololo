@@ -1,2 +1,5 @@
 rootProject.name = 'wololo'
+include 'api'
+include 'core'
+include 'net'
 
