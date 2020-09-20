@@ -8,7 +8,6 @@ import org.neverplan2.wololo.net.exception.NetworkScannerException;
 
 import java.net.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
@@ -90,6 +89,6 @@ public class PingNetworkScanner implements NetworkScanner {
 
     @Override
     public List<Address> scanNetwork(String nic) throws NetworkScannerException {
-        return new ArrayList<Address>();
+        return new ArrayList<>();
     }
 }
