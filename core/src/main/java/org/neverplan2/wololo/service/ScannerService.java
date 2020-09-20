@@ -18,9 +18,13 @@ public class ScannerService {
     @PostConstruct
     public void init(){
         serviceLoader = ServiceLoader.load(NetworkScanner.class);
-        if (!serviceLoader.iterator().hasNext()) {
+        if (!hasNetworkScanners()) {
             log.warn("No scanner registered.");
         }
+    }
+
+    public boolean hasNetworkScanners() {
+        return serviceLoader.iterator().hasNext();
     }
 
     public List<NetworkScanner> getNetworkScanners() {

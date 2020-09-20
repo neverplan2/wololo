@@ -22,3 +22,9 @@ bootJar {
 test {
     useJUnitPlatform()
 }
+
+sonarqube {
+    properties{
+        property 'sonar.coverage.exclusions', "**/config/*"
+    }
+}
