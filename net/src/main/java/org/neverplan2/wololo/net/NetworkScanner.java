@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface NetworkScanner {
 
+    String getName();
+
     List<Nic> getNetworkInterfaces() throws NetworkScannerException;
 
     List<Address> scanNetwork(String nic) throws NetworkScannerException;
