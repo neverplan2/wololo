@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -82,13 +83,13 @@ public class PingNetworkScanner implements NetworkScanner {
             List<NetworkInterface> nis = Collections.list(NetworkInterface.getNetworkInterfaces());
             nics = nis.stream().filter(this::isLocalAddress).map(this::mapNetworkInterface).collect(Collectors.toList());
         } catch (SocketException e) {
-            e.printStackTrace();
+            log.log(Level.SEVERE, e.getLocalizedMessage(), e);
         }
         return nics;
     }
 
     @Override
     public List<Address> scanNetwork(String nic) throws NetworkScannerException {
-        return null;
+        return new ArrayList<Address>();
     }
 }

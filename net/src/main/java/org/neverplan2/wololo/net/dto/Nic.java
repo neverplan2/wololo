@@ -14,7 +14,7 @@ public class Nic {
     public enum NicState{
         UP,
         DOWN
-    };
+    }
 
     private String device;
     private String name;
