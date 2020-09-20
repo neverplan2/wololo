@@ -9,6 +9,8 @@ import org.junit.runner.RunWith;
 import org.mockito.*;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.neverplan2.wololo.net.NetworkScanner;
+import org.neverplan2.wololo.net.dto.Nic;
+import org.neverplan2.wololo.net.exception.NetworkScannerException;
 import org.slf4j.LoggerFactory;
 
 import java.util.Iterator;
@@ -50,6 +52,17 @@ public class ScannerServiceTest {
     public void scanners() {
         assertEquals(1, scannerService.getNetworkScanners().size());
     }
+
+    @Test
+    public void getNics() {
+        try {
+            scannerService.getNetworkScanners().get(0).getNetworkInterfaces().forEach(System.out::println);
+        } catch (NetworkScannerException e) {
+            e.printStackTrace();
+        }
+        assertTrue(true);
+    }
+
 
     @AfterClass
     public static void stopSet() {
