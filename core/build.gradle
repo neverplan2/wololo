@@ -14,6 +14,7 @@ dependencies {
     testImplementation dependencies.spring_boot_starter_test
     runtimeOnly dependencies.h2
     implementation dependencies.spring_boot_starter_jpa
+    implementation dependencies.flyway_core
 }
 
 bootJar {
