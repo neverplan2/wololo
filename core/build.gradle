@@ -12,7 +12,8 @@ dependencies {
     implementation dependencies.swagger_ui
     testAnnotationProcessor dependencies.lombok
     testImplementation dependencies.spring_boot_starter_test
-
+    runtimeOnly dependencies.h2
+    implementation dependencies.spring_boot_starter_jpa
 }
 
 bootJar {
