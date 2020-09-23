@@ -2,23 +2,19 @@ package org.neverplan2.wololo.service;
 
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.spi.ILoggingEvent;
-import ch.qos.logback.classic.spi.LoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
-import org.junit.*;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.*;
+import org.mockito.InjectMocks;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.neverplan2.wololo.net.NetworkScanner;
-import org.neverplan2.wololo.net.dto.Nic;
 import org.neverplan2.wololo.net.exception.NetworkScannerException;
 import org.slf4j.LoggerFactory;
 
-import java.util.Iterator;
-import java.util.ServiceLoader;
-
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.argThat;
-import static org.mockito.Mockito.verify;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ScannerServiceTest {

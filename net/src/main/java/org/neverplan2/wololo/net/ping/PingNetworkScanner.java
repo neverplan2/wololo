@@ -4,7 +4,6 @@ import org.apache.commons.net.util.SubnetUtils;
 import org.neverplan2.wololo.net.NetworkScanner;
 import org.neverplan2.wololo.net.dto.Address;
 import org.neverplan2.wololo.net.dto.Nic;
-import org.neverplan2.wololo.net.exception.NetworkScannerException;
 
 import java.net.*;
 import java.util.ArrayList;
@@ -16,7 +15,7 @@ import java.util.stream.Collectors;
 
 public class PingNetworkScanner implements NetworkScanner {
 
-    private Logger log = Logger.getLogger(PingNetworkScanner.class.getName());
+    private final Logger log = Logger.getLogger(PingNetworkScanner.class.getName());
 
     private String byteToString(byte[] addr) {
         StringBuilder sb = new StringBuilder(18);
@@ -76,7 +75,7 @@ public class PingNetworkScanner implements NetworkScanner {
     }
 
     @Override
-    public List<Nic> getNetworkInterfaces() throws NetworkScannerException {
+    public List<Nic> getNetworkInterfaces() {
         List<Nic> nics = new ArrayList<>();
         try {
             List<NetworkInterface> nis = Collections.list(NetworkInterface.getNetworkInterfaces());
@@ -88,7 +87,7 @@ public class PingNetworkScanner implements NetworkScanner {
     }
 
     @Override
-    public List<Address> scanNetwork(String nic) throws NetworkScannerException {
+    public List<Address> scanNetwork(String nic) {
         return new ArrayList<>();
     }
 }

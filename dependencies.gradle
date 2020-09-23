@@ -10,6 +10,8 @@ ext {
         commons_net              : 'commons-net:commons-net:3.6',
         h2                       : 'com.h2database:h2:1.4.200',
         spring_boot_starter_jpa  : 'org.springframework.boot:spring-boot-starter-data-jpa',
-        flyway_core              : 'org.flywaydb:flyway-core:6.5.7'
+        flyway_core              : 'org.flywaydb:flyway-core:6.5.7',
+        powermock_module_junit4  : 'org.powermock:powermock-module-junit4:1.5.1',
+        powermock_api_mockito2   : 'org.powermock:powermock-api-mockito2:1.7.3'
     ]
 }
