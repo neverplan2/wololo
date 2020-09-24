@@ -6,6 +6,7 @@ dependencies {
     compileOnly dependencies.lombok
     annotationProcessor dependencies.lombok
     implementation project(':net')
+    implementation project(':api')
     implementation dependencies.javax_annotation_api
     implementation dependencies.spring_boot_starter_web
     implementation dependencies.swagger2

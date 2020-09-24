@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
 @RequestMapping("/api/v1/address")
 public interface NetAddressEndpoint {
 
@@ -42,16 +41,16 @@ public interface NetAddressEndpoint {
     })
     NetAddress updateNetAddress(@RequestBody NetAddress netAddress);
 
-    @PostMapping("/delete")
+    @DeleteMapping("/delete")
     @ApiOperation(value = "Delete a network address", response = NetAddress.class)
     @ResponseStatus(code = HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 404, message = "The resource you were trying to reach is not found"),
             @ApiResponse(code = 500, message = "Application failed to process the request")
     })
-    void deleteNetAddress(final NetAddress netAddress);
+    void deleteNetAddress(@RequestBody final NetAddress netAddress);
 
-    @PostMapping("/all")
+    @GetMapping("/all")
     @ApiOperation(value = "Return all persisted network addresses.", response = List.class)
     @ResponseStatus(code = HttpStatus.OK)
     @ApiResponses(value = {
@@ -60,12 +59,12 @@ public interface NetAddressEndpoint {
     })
     List<NetAddress> getNetAddressList();
 
-    @PostMapping("/deletebatch")
+    @DeleteMapping("/deletebatch")
     @ApiOperation(value = "Delete a list of network addresses")
     @ResponseStatus(code = HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 404, message = "The resource you were trying to reach is not found"),
             @ApiResponse(code = 500, message = "Application failed to process the request")
     })
-    void deleteNetAddressList(final List<NetAddress> netAddressList);
+    void deleteNetAddressList(@RequestBody final List<NetAddress> netAddressList);
 }

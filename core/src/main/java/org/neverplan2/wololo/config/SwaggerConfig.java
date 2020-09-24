@@ -15,7 +15,7 @@ public class SwaggerConfig {
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("wololo"))
+                .apis(RequestHandlerSelectors.basePackage("org.neverplan2.wololo"))
                 .build()
                 .pathMapping("/");
     }
