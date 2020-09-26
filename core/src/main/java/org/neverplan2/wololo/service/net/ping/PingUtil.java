@@ -1,23 +1,18 @@
-package org.neverplan2.wololo.net.ping;
+package org.neverplan2.wololo.service.net.ping;
 
+import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.net.util.SubnetUtils;
-import org.neverplan2.wololo.net.NetworkScanner;
-import org.neverplan2.wololo.net.dto.Address;
 import org.neverplan2.wololo.net.dto.Nic;
 
 import java.net.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
-public class PingNetworkScanner implements NetworkScanner {
+@Slf4j
+@UtilityClass
+class PingUtil {
 
-    private final Logger log = Logger.getLogger(PingNetworkScanner.class.getName());
-
-    private String byteToString(byte[] addr) {
+    String byteToString(byte[] addr) {
         StringBuilder sb = new StringBuilder(18);
         for (byte b : addr) {
             if (sb.length() > 0)
@@ -27,16 +22,16 @@ public class PingNetworkScanner implements NetworkScanner {
         return sb.toString();
     }
 
-    private boolean isLocalAddress(NetworkInterface networkInterface) {
+    public boolean isLocalAddress(NetworkInterface networkInterface) {
         try {
-            return !networkInterface.isLoopback();
+            return networkInterface.isLoopback();
         } catch (SocketException e) {
-            log.warning(e.getLocalizedMessage());
-            return false;
+            log.error(e.getLocalizedMessage());
+            return true;
         }
     }
 
-    private void mapInterfaceAddress(InterfaceAddress interfaceAddress, Nic nic) {
+    void mapInterfaceAddress(InterfaceAddress interfaceAddress, Nic nic) {
         if (interfaceAddress.getAddress() instanceof Inet4Address) {
             Inet4Address addr = (Inet4Address) interfaceAddress.getAddress();
             nic.setHost(addr.getCanonicalHostName());
@@ -52,7 +47,7 @@ public class PingNetworkScanner implements NetworkScanner {
         }
     }
 
-    private Nic mapNetworkInterface(NetworkInterface networkInterface) {
+    Nic mapNetworkInterface(NetworkInterface networkInterface) {
         Nic nic = new Nic();
         nic.setDisplayName(networkInterface.getDisplayName());
         nic.setIndex(networkInterface.getIndex());
@@ -62,32 +57,10 @@ public class PingNetworkScanner implements NetworkScanner {
             nic.setMtu(networkInterface.getMTU());
             nic.setState(networkInterface.isUp() ? Nic.NicState.UP : Nic.NicState.DOWN);
         } catch (SocketException e) {
-            log.warning(e.getLocalizedMessage());
+            log.error(e.getLocalizedMessage());
         }
-        networkInterface.getInterfaceAddresses().forEach(a -> this.mapInterfaceAddress(a, nic));
+        networkInterface.getInterfaceAddresses().forEach(a -> PingUtil.mapInterfaceAddress(a, nic));
         return nic;
 
-    }
-
-    @Override
-    public String getName() {
-        return "Ping scanner";
-    }
-
-    @Override
-    public List<Nic> getNetworkInterfaces() {
-        List<Nic> nics = new ArrayList<>();
-        try {
-            List<NetworkInterface> nis = Collections.list(NetworkInterface.getNetworkInterfaces());
-            nics = nis.stream().filter(this::isLocalAddress).map(this::mapNetworkInterface).collect(Collectors.toList());
-        } catch (SocketException e) {
-            log.log(Level.SEVERE, e.getLocalizedMessage(), e);
-        }
-        return nics;
-    }
-
-    @Override
-    public List<Address> scanNetwork(String nic) {
-        return new ArrayList<>();
     }
 }

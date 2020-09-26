@@ -9,11 +9,8 @@ dependencies {
 
     compileOnly dependencies.lombok
     annotationProcessor dependencies.lombok
-    implementation dependencies.commons_net
     testAnnotationProcessor dependencies.lombok
     testImplementation dependencies.spring_boot_starter_test
-    testImplementation dependencies.powermock_module_junit4
-    testImplementation dependencies.powermock_api_mockito2
 }
 
 

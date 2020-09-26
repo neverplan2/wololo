@@ -11,6 +11,7 @@ dependencies {
     implementation dependencies.spring_boot_starter_web
     implementation dependencies.swagger2
     implementation dependencies.swagger_ui
+    implementation dependencies.commons_net
     testAnnotationProcessor dependencies.lombok
     testImplementation dependencies.spring_boot_starter_test
     runtimeOnly dependencies.h2
