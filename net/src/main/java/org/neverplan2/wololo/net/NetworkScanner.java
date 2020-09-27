@@ -12,6 +12,6 @@ public interface NetworkScanner {
 
     List<Nic> getNetworkInterfaces() throws NetworkScannerException;
 
-    List<Address> scanNetwork(String nic) throws NetworkScannerException;
+    List<Address> scanNetwork(Nic nic) throws NetworkScannerException;
 
 }

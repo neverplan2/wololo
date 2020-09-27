@@ -5,8 +5,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.net.util.SubnetUtils;
 import org.neverplan2.wololo.net.dto.Nic;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.*;
-import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Slf4j
 @UtilityClass
@@ -63,4 +67,25 @@ class PingUtil {
         return nic;
 
     }
+
+    public String getMacAaddress(String param) throws IOException {
+        Process p = Runtime.getRuntime().exec("arp -a " + param);
+        BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
+        String line;
+        while ((line = input.readLine()) != null) {
+            if (!line.trim().isEmpty()) {
+                log.info(line);
+                // keep only the process name
+                line = line.substring(1);
+                Pattern pattern = Pattern.compile("..:..:..:..:..:..");
+                Matcher matcher = pattern.matcher(line);
+                if (matcher.find()) {
+                    return matcher.group();
+                }
+            }
+
+        }
+        return null;
+    }
+
 }

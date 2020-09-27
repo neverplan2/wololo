@@ -1,11 +1,13 @@
 package org.neverplan2.wololo.service.net.ping;
 
-import org.apache.commons.net.util.SubnetUtils;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.neverplan2.wololo.net.dto.Nic;
 
+import java.io.IOException;
 import java.net.*;
 import java.util.ArrayList;
 
@@ -15,6 +17,9 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PingUtilTest {
+
+    @InjectMocks
+    private PingNetworkScanner pns;
 
     @Test
     public void byteToStringTest() {
@@ -103,6 +108,13 @@ public class PingUtilTest {
         assertEquals(nic.getState(), Nic.NicState.UP);
         assertNotNull(nic.getIpv4Address());
         assertNotNull(nic.getIpv6Address());
+    }
+
+    @Ignore
+    @Test
+    public void getMacAaddressTest() throws IOException, InterruptedException {
+        Nic nic = pns.getNetworkInterfaces().get(0);
+        assertNull(PingUtil.getMacAaddress(nic.getIpv4Address()));
     }
 
 }
