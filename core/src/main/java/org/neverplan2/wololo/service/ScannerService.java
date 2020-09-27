@@ -1,34 +1,48 @@
 package org.neverplan2.wololo.service;
 
-import lombok.extern.slf4j.Slf4j;
-import org.neverplan2.wololo.net.NetworkScanner;
+import lombok.AllArgsConstructor;
+import org.neverplan2.wololo.api.model.NetAddress;
+import org.neverplan2.wololo.api.model.NicAdapter;
+import org.neverplan2.wololo.dao.NicAdapterEntity;
+import org.neverplan2.wololo.repo.NicAdapterRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
-import java.util.ServiceLoader;
-import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
-@Slf4j
+import static java.util.stream.Collectors.toList;
+
 @Service
+@AllArgsConstructor(onConstructor = @__(@Autowired))
 public class ScannerService {
 
-    private ServiceLoader<NetworkScanner> serviceLoader;
+    private final NicAdapterRepository nicAdapterRepository;
 
-    @PostConstruct
-    public void init(){
-        serviceLoader = ServiceLoader.load(NetworkScanner.class);
-        if (!hasNetworkScanners()) {
-            log.warn("No scanner registered.");
-        }
+    public List<NicAdapter> scanNicAdapters() {
+        List<NicAdapterEntity> collect = StreamSupport.stream(nicAdapterRepository.findAll().spliterator(), false).collect(toList());
+        return collect.stream().map(this::entityToModel).collect(toList());
     }
 
-    public boolean hasNetworkScanners() {
-        return serviceLoader.iterator().hasNext();
+    public List<NetAddress> scanNetwork(String address, String netmask) {
+        return null;
     }
 
-    public List<NetworkScanner> getNetworkScanners() {
-        return serviceLoader.stream().map(ServiceLoader.Provider::get).collect(Collectors.toList());
+    public NicAdapter entityToModel(NicAdapterEntity nicAdapterEntity) {
+        if (null == nicAdapterEntity) return new NicAdapter();
+        NicAdapter netAddress = new NicAdapter();
+        netAddress.setName(nicAdapterEntity.getName());
+        netAddress.setDisplayName(nicAdapterEntity.getDisplayName());
+        netAddress.setHostname(nicAdapterEntity.getHostname());
+        netAddress.setMac(nicAdapterEntity.getMac());
+        netAddress.setBroadcast(nicAdapterEntity.getBroadcast());
+        netAddress.setNetmask(nicAdapterEntity.getNetmask());
+        netAddress.setIpv4Address(nicAdapterEntity.getIpv4Address());
+        netAddress.setIpv6Address(nicAdapterEntity.getIpv6Address());
+        netAddress.setIndex(nicAdapterEntity.getIndex());
+        netAddress.setMtu(nicAdapterEntity.getMtu());
+        return netAddress;
     }
+
 
 }

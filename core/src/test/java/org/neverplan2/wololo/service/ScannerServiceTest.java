@@ -1,20 +1,21 @@
 package org.neverplan2.wololo.service;
 
-import ch.qos.logback.classic.Logger;
-import ch.qos.logback.classic.spi.ILoggingEvent;
-import ch.qos.logback.core.read.ListAppender;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.neverplan2.wololo.net.exception.NetworkScannerException;
-import org.slf4j.LoggerFactory;
+import org.neverplan2.wololo.api.model.NetAddress;
+import org.neverplan2.wololo.api.model.NicAdapter;
+import org.neverplan2.wololo.dao.NetAddressEntity;
+import org.neverplan2.wololo.dao.NicAdapterEntity;
+import org.neverplan2.wololo.repo.NicAdapterRepository;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ScannerServiceTest {
@@ -22,47 +23,26 @@ public class ScannerServiceTest {
     @InjectMocks
     protected ScannerService scannerService;
 
-    private static ListAppender<ILoggingEvent> listAppender;
+    @Mock
+    private NicAdapterRepository nicAdapterRepository;
 
-    @BeforeClass
-    public static void prepareSet() {
-        Logger root = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
-        listAppender = new ListAppender<>();
-        listAppender.start();
-        root.addAppender(listAppender);
-    }
 
-    @Before
-    public void prepareTest() {
-        scannerService.init();
+    @Test
+    public void scanNicAdapters() {
+        when(nicAdapterRepository.findAll()).thenReturn(Arrays.asList(new NicAdapterEntity(), new NicAdapterEntity()));
+        List<NicAdapter> newAddress = scannerService.scanNicAdapters();
+        assertEquals(2, newAddress.size());
     }
 
     @Test
-    public void initTest() {
-        this.scannerService.init();
-        //assertEquals("No scanner registered.", listAppender.list.get(0).getMessage());
-        assertTrue(true);
+    public void scanNetwork() {
+        List<NetAddress> netAddresses = scannerService.scanNetwork("", "");
+        assertNull(netAddresses);
     }
 
     @Test
-    public void scanners() {
-        assertEquals(1, scannerService.getNetworkScanners().size());
+    public void modelToEntity() {
+        NicAdapter netAddressEntity = scannerService.entityToModel(null);
+        assertNotNull(netAddressEntity);
     }
-
-    @Test
-    public void getNics() {
-        try {
-            scannerService.getNetworkScanners().get(0).getNetworkInterfaces().forEach(System.out::println);
-        } catch (NetworkScannerException e) {
-            e.printStackTrace();
-        }
-        assertTrue(true);
-    }
-
-
-    @AfterClass
-    public static void stopSet() {
-        listAppender.stop();
-    }
-
 }

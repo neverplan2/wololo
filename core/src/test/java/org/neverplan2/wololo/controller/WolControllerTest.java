@@ -5,7 +5,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.neverplan2.wololo.service.WolService;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -20,6 +22,9 @@ public class WolControllerTest {
 
     @InjectMocks
     protected WolController controller;
+
+    @Mock
+    protected WolService wolService;
 
     private MockMvc mvc;
     private final ObjectMapper om = new ObjectMapper();

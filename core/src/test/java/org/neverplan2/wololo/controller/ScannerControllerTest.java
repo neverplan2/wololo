@@ -5,7 +5,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.neverplan2.wololo.service.ScannerService;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -21,6 +23,9 @@ public class ScannerControllerTest {
     @InjectMocks
     protected ScannerController controller;
 
+    @Mock
+    protected ScannerService scannerService;
+
     private MockMvc mvc;
     private final ObjectMapper om = new ObjectMapper();
 
@@ -34,7 +39,7 @@ public class ScannerControllerTest {
         mvc.perform(get("/api/v1/scanner/nic"))
                 .andExpect(status().isOk())
                 .andDo(print())
-                .andExpect(content().string(equalTo("")));
+                .andExpect(content().string(equalTo("[]")));
     }
 
     @Test
@@ -42,7 +47,7 @@ public class ScannerControllerTest {
         mvc.perform(get("/api/v1/scanner/network/?address=01:23:45:67:89:ab&netmask=255.255.255.0"))
                 .andExpect(status().isOk())
                 .andDo(print())
-                .andExpect(content().string(equalTo("")));
+                .andExpect(content().string(equalTo("[]")));
     }
 
 }

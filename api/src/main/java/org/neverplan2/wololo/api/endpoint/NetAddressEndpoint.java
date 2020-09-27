@@ -23,14 +23,14 @@ public interface NetAddressEndpoint {
     NetAddress createNetAddress(@RequestParam String mac, @RequestParam(required = false) String comment);
 
     @PostMapping("/addlist")
-    @ApiOperation(value = "Add an entire list of network addresses", response = NetAddress.class)
+    @ApiOperation(value = "Add an entire list of network addresses", response = List.class)
     @ResponseStatus(code = HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 400, message = "Address already exists."),
             @ApiResponse(code = 404, message = "The resource you were trying to reach is not found"),
             @ApiResponse(code = 500, message = "Application failed to process the request")
     })
-    NetAddress addNetAddressList(@RequestBody List<NetAddress> netAddressList);
+    List<NetAddress> addNetAddressList(@RequestBody List<NetAddress> netAddressList);
 
     @PostMapping("/update")
     @ApiOperation(value = "Update a network address", response = NetAddress.class)
