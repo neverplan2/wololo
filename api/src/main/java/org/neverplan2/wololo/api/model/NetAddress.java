@@ -13,7 +13,11 @@ public class NetAddress {
     private String address;
     private String hostname;
     private String cidr;
-    private String brodcastAddress;
+    private String broadcastAddress;
     private String comment;
     private boolean active;
+
+    public NetAddress(String mac) {
+        this.mac = mac;
+    }
 }

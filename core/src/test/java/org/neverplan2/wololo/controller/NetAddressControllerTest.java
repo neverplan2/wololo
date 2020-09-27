@@ -5,8 +5,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.neverplan2.wololo.api.model.NetAddress;
+import org.neverplan2.wololo.service.NetAddressService;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -24,6 +26,9 @@ public class NetAddressControllerTest {
 
     @InjectMocks
     protected NetAddressController controller;
+
+    @Mock
+    protected NetAddressService netAddressService;
 
     private MockMvc mvc;
     private final ObjectMapper om = new ObjectMapper();
@@ -49,7 +54,7 @@ public class NetAddressControllerTest {
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print())
-                .andExpect(content().string(equalTo("")));
+                .andExpect(content().string(equalTo("[]")));
     }
 
     @Test
@@ -83,7 +88,7 @@ public class NetAddressControllerTest {
         mvc.perform(get("/api/v1/address/all"))
                 .andExpect(status().isOk())
                 .andDo(print())
-                .andExpect(content().string(equalTo("")));
+                .andExpect(content().string(equalTo("[]")));
     }
 
     @Test
