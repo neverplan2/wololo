@@ -12,7 +12,7 @@ pipeline {
         }
         stage('Sonarqube') {
             steps {
-                sh './gradlew sonarqube'
+                sh './gradlew sonarqube -Dsonar.branch.name=${BRANCH_NAME}'
             }
         }
     }
